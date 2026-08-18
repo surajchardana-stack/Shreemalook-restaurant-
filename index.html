@@ -597,4 +597,497 @@ closeModal('adminModal');
 };
 
 window.openAdmin=async()=>{
+if(!currentUser?.email||cur<div id="adminMenu"></div>
+<button class="green" onclick="addItem()">+ Add Item</button>
+<hr>
+<h3>📦 Orders</h3>
+
+<div id="orderNotice" class="notice hidden">🔔 नया Order आया है!</div>
+<button id="orderSoundBtn" class="green" style="width:100%;margin-bottom:8px" onclick="enableOrderSound()">🔊 Order Sound चालू करें</button>
+<button class="dark" style="width:100%;margin-bottom:8px" onclick="testOrderSound()">🔔 Sound Test</button>
+
+<div id="orders">Loading...</div>
+<button class="danger" style="margin-top:8px" onclick="clearLocalOrders()">Clear Local Orders</button>
+<button class="danger" style="margin-top:8px;width:100%" onclick="adminLogout()">🔐 Admin Logout</button>
+<button class="close" style="margin-top:8px;width:100%" onclick="closeModal('adminModal')">Close</button>
+</div>
+</div>
+
+<script type="module">
+
+const firebaseConfig = {
+apiKey: "AIzaSyAJ6RfuOQWw3XV_5E_JLcOCuMzldCMSM-E",
+authDomain: "shreemalook-restaurant.firebaseapp.com",
+projectId: "shreemalook-restaurant",
+storageBucket: "shreemalook-restaurant.firebasestorage.app",
+messagingSenderId: "666247853776",
+appId: "1:666247853776:web:ab837e82da6327347e90d5",
+measurementId: "G-94NZ9BYHC1"
+};
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+import { getFirestore, collection, addDoc, getDocs, query, orderBy, updateDoc, doc, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+
+let firebaseReady=false, db=null, auth=null, googleProvider=null, currentUser=null;
+
+try{
+if(!firebaseConfig.apiKey.includes("PASTE_") && !firebaseConfig.projectId.includes("PASTE_")){
+const app=initializeApp(firebaseConfig);
+db=getFirestore(app);
+auth=getAuth(app);
+googleProvider=new GoogleAuthProvider();
+googleProvider.setCustomParameters({prompt:'select_account'});
+firebaseReady=true;
+
+onAuthStateChanged(auth,user=>{
+currentUser=user||null;
+
+if(user){
+const profile={
+uid:user.uid,
+name:user.displayName||'',
+email:user.email||'',
+photoURL:user.photoURL||''
+};
+
+localStorage.setItem('sm_google_user',JSON.stringify(profile));
+$('loginState').textContent='✅ '+(user.displayName||'Login');
+saveCustomerProfile(user);
+}else{
+localStorage.removeItem('sm_google_user');
+$('loginState').textContent='👤 Login';
+}
+});
+}
+}catch(e){
+console.error('Firebase init error:',e)
+}
+
+const UPI_ID='shreejankilal@axl';
+const WA='917339761118';
+const OWNER_EMAIL='surajchardana@gmail.com';
+
+const defaultItems=[
+{name:'कचौरी',price:20,emoji:'🥟',desc:'गरमा-गरम कचौरी',available:true},
+{name:'ब्रेड पकौड़ा',price:30,emoji:'🍞',desc:'क्रिस्पी ब्रेड पकौड़ा',available:true},
+{name:'पोहा',price:40,emoji:'🍚',desc:'ताज़ा और स्वादिष्ट पोहा',available:true}
+];
+
+let items=JSON.parse(localStorage.getItem('sm_items')||'null')||defaultItems;
+let qty=items.map(()=>0);
+let currentLocation=null;
+
+const $=id=>document.getElementById(id);
+
+function render(){
+$('menu').innerHTML=items.map((x,i)=>`
+<div class="item">
+<div class="pic">${x.emoji}</div>
+<div class="info">
+<div class="name">${esc(x.name)}</div>
+<div class="desc">${esc(x.desc||'')}</div>
+<div class="price">₹${x.price}</div>
+${x.available===false?'<div class="out">OUT OF STOCK</div>':(qty[i]?`
+<div class="qty">
+<button onclick="changeQty(${i},-1)">−</button>
+<b>${qty[i]}</b>
+<button onclick="changeQty(${i},1)">+</button>
+</div>`:`<button class="add" onclick="changeQty(${i},1)">ADD</button>`)}
+</div>
+</div>`).join('');
+updateCart()
+}
+
+window.changeQty=(i,n)=>{
+if(items[i].available===false)return;
+qty[i]=Math.max(0,qty[i]+n);
+render()
+};
+
+function updateCart(){
+const t=items.reduce((s,x,i)=>s+x.price*qty[i],0);
+$('total').textContent=t;
+$('count').textContent=qty.reduce((a,b)=>a+b,0)
+}
+
+function esc(s){
+return String(s).replace(/[&<>"']/g,m=>({
+'&':'&amp;',
+'<':'&lt;',
+'>':'&gt;',
+'"':'&quot;',
+"'":'&#039;'
+}[m]))
+}
+
+window.getLocation=()=>{
+if(!navigator.geolocation){
+alert('Chrome में GPS इस्तेमाल करें.');
+return
+}
+$('locStatus').textContent='📍 GPS location ली जा रही है...';
+
+navigator.geolocation.getCurrentPosition(
+p=>{
+currentLocation={
+lat:p.coords.latitude,
+lng:p.coords.longitude
+};
+
+$('locStatus').innerHTML=`📍 Location मिल गई — <a target="_blank" href="https://www.google.com/maps?q=${currentLocation.lat},${currentLocation.lng}">Maps</a>`
+},
+()=>{
+$('locStatus').textContent='⚠ Location permission दें या GPS ON करें।'
+},
+{
+enableHighAccuracy:true,
+timeout:20000,
+maximumAge:0
+})
+};
+
+function customerSaved(){
+try{
+const u=JSON.parse(localStorage.getItem('sm_google_user')||'null');
+return u&&u.uid?u:null;
+}catch{
+return null
+}
+}
+
+async function saveCustomerProfile(user){
+if(!db||!user?.uid)return;
+
+try{
+await setDoc(doc(db,'customer_profiles',user.uid),{
+uid:user.uid,
+name:user.displayName||'',
+email:user.email||'',
+photoURL:user.photoURL||'',
+updatedAt:serverTimestamp()
+},{merge:true});
+}catch(e){
+console.log('Customer profile save error:',e)
+}
+}
+
+function ensureLogin(){
+if(firebaseReady && currentUser?.uid)return true;
+openLogin();
+return false
+}
+
+function openLogin(){
+$('loginError').textContent='';
+$('loginModal').style.display='block'
+}
+
+window.loginCustomer=async()=>{
+$('loginError').textContent='';
+
+if(!auth||!googleProvider||!firebaseReady){
+$('loginError').textContent='Firebase Google Login उपलब्ध नहीं है.';
+return
+}
+
+try{
+await setPersistence(auth,browserLocalPersistence);
+const result=await signInWithPopup(auth,googleProvider);
+const user=result.user;
+
+currentUser=user;
+
+saveCustomerProfile(user).catch(e=>console.log('Customer profile save error:',e));
+
+localStorage.setItem('sm_google_user',JSON.stringify({
+uid:user.uid,
+name:user.displayName||'',
+email:user.email||'',
+photoURL:user.photoURL||''
+}));
+
+$('loginState').textContent='✅ '+(user.displayName||'Login');
+closeModal('loginModal');
+alert('✅ Google Login सफल हुआ.');
+}catch(e){
+console.error(e);
+
+const code=e?.code||'';
+
+const msg =
+code==='auth/unauthorized-domain'
+? 'यह वेबसाइट Firebase में Authorized Domain नहीं है। Firebase Authentication → Settings → Authorized domains में surajchardana-stack.github.io जोड़ें।'
+:
+code==='auth/popup-blocked'
+? 'Google Login popup block हो गया। Chrome में pop-up allow करें और फिर कोशिश करें।'
+:
+code==='auth/popup-closed-by-user'
+? 'Google Login window बंद हो गई। फिर से Login करें।'
+:
+code==='auth/internal-error'
+? 'Google Login में browser/Firebase internal error आया। Chrome में page reload करके फिर Login करें।'
+:
+'Google Login नहीं हुआ: '+(code||e.message);
+
+$('loginError').textContent=msg;
+}
+};
+
+window.logoutCustomer=async()=>{
+try{
+if(auth)await signOut(auth);
+}catch(e){
+console.log(e)
+}
+
+localStorage.removeItem('sm_google_user');
+localStorage.removeItem('sm_google_uid');
+currentUser=null;
+$('loginState').textContent='👤 Google Login';
+closeModal('loginModal');
+};
+
+function collectCustomer(){
+const saved=customerSaved()||{};
+
+return {
+name:$('customerName').value.trim(),
+phone:$('customerPhone').value.trim()||saved.phone||'',
+address:$('customerAddress').value.trim()
+}
+}
+
+function totalNow(){
+return items.reduce((s,x,i)=>s+x.price*qty[i],0)
+}
+
+window.openPayment=()=>{
+const t=totalNow();
+
+if(t<=0){
+alert('पहले कोई item ADD करें.');
+return
+}
+
+if(t<100){
+alert('Minimum order ₹100 है.');
+return
+}
+
+if(!ensureLogin())return;
+
+const c=collectCustomer();
+
+if(!c.name||!c.phone||!c.address){
+alert('नाम, मोबाइल और पूरा पता भरें.');
+return
+}
+
+if(!/^[0-9]{10}$/.test(c.phone)){
+alert('10 अंकों का मोबाइल नंबर डालें.');
+return
+}
+
+if(!currentLocation){
+alert('पहले Current Location लें.');
+return
+}
+
+localStorage.setItem('pending_order',JSON.stringify({
+id:'SM'+Date.now(),
+uid:currentUser?.uid||null,
+customer:c,
+location:currentLocation,
+total:t,
+items:items.map((x,i)=>qty[i]?{
+name:x.name,
+qty:qty[i],
+price:x.price
+}:null).filter(Boolean)
+}));
+
+$('paymentSummary').innerHTML=
+`<b>कुल: ₹${t}</b><br>${
+items.map((x,i)=>qty[i]?`${esc(x.name)} × ${qty[i]}`:'')
+.filter(Boolean).join('<br>')
+}`;
+
+$('paymentModal').style.display='block'
+};
+
+window.showPlaceOrder=()=>{
+const o=JSON.parse(localStorage.getItem('pending_order')||'null');
+
+if(!o||!o.paymentStarted){
+alert('पहले UPI Payment करें.');
+return
+}
+
+$('placeOrderBtn').classList.remove('hidden');
+$('placeOrderBtn').scrollIntoView({
+behavior:'smooth',
+block:'center'
+});
+};
+
+window.launchUPI=()=>{
+const o=JSON.parse(localStorage.getItem('pending_order')||'null');
+
+if(!o){
+alert('पहले Payment Options खोलें.');
+return
+}
+
+o.paymentStarted=true;
+localStorage.setItem('pending_order',JSON.stringify(o));
+
+if($('paymentState'))
+$('paymentState').textContent='✅ Payment app खुल रहा है... Payment के बाद वापस आकर Place Order दबाएँ.';
+
+location.href=
+`upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=Shree%20Maluk&am=${o.total}&cu=INR&tn=Restaurant%20Order`;
+};
+
+window.placeOrder=async()=>{
+const o=JSON.parse(localStorage.getItem('pending_order')||'null');
+
+if(!o){
+alert('पहले Payment Options खोलें.');
+return
+}
+
+if(!o.paymentStarted){
+alert('पहले UPI Payment करें, फिर Place Order दबाएँ.');
+return
+}
+
+if(!firebaseReady||!currentUser?.uid){
+alert('पहले Google Login करें.');
+return
+}
+
+o.status='New';
+o.createdAt=new Date().toISOString();
+
+try{
+
+if(firebaseReady){
+await addDoc(collection(db,'orders'),{
+...o,
+uid:currentUser?.uid||null,
+customer:{
+...o.customer,
+googleName:currentUser?.displayName||customerSaved()?.name||'',
+googleEmail:currentUser?.email||customerSaved()?.email||''
+},
+createdAt:serverTimestamp()
+})
+}
+
+let os=JSON.parse(localStorage.getItem('sm_orders')||'[]');
+os.unshift(o);
+localStorage.setItem('sm_orders',JSON.stringify(os));
+localStorage.removeItem('pending_order');
+
+if($('placeOrderBtn'))
+$('placeOrderBtn').classList.add('hidden');
+
+if($('paymentState'))
+$('paymentState').textContent='✅ Order submitted';
+
+const lines=o.items.map(x=>`${x.name} × ${x.qty} = ₹${x.price*x.qty}`).join('\n');
+
+const msg=
+`नमस्ते श्री मलूक रेस्टोरेंट 🙏
+
+नया Order: ${o.id}
+नाम: ${o.customer.name}
+मोबाइल: ${o.customer.phone}
+पता: ${o.customer.address}
+Location: https://www.google.com/maps?q=${o.location.lat},${o.location.lng}
+
+${lines}
+
+कुल: ₹${o.total}
+Payment: UPI
+UPI: ${UPI_ID}`;
+
+window.open(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`,'_blank');
+
+closeModal('paymentModal');
+alert('✅ Order Place हो गया.');
+
+qty=items.map(()=>0);
+render()
+
+}catch(e){
+console.error(e);
+alert('Order save नहीं हुआ: '+e.message)
+}
+};
+
+window.scrollToForm=()=>{
+document.querySelector('.form').scrollIntoView({behavior:'smooth'})
+};
+
+window.closeModal=id=>{
+$(id).style.display='none'
+};
+
+window.adminLogin=()=>{
+$('adminError').textContent='';
+
+if(currentUser?.email?.toLowerCase()===OWNER_EMAIL.toLowerCase()){
+openAdmin();
+return
+}
+
+$('adminLoginModal').style.display='block';
+};
+
+window.checkAdmin=async()=>{
+try{
+
+if(!auth||!googleProvider){
+$('adminError').textContent='Firebase Google Login उपलब्ध नहीं है.';
+return
+}
+
+await setPersistence(auth,browserLocalPersistence);
+
+const result=await signInWithPopup(auth,googleProvider);
+const user=result.user;
+
+if((user.email||'').toLowerCase()!==OWNER_EMAIL.toLowerCase()){
+$('adminError').textContent='यह Google account Owner account नहीं है.';
+
+try{
+await signOut(auth)
+}catch(e){}
+
+return
+}
+
+closeModal('adminLoginModal');
+openAdmin();
+
+}catch(e){
+console.error(e);
+$('adminError').textContent='Google Login नहीं हुआ: '+(e.code||e.message);
+}
+};
+
+window.adminLogout=async()=>{
+try{
+if(auth)await signOut(auth)
+}catch(e){}
+
+localStorage.removeItem('sm_google_user');
+currentUser=null;
+$('loginState').textContent='👤 Google Login';
+closeModal('adminModal');
+};
+
+window.openAdmin=async()=>{
 if(!currentUser?.email||cur
