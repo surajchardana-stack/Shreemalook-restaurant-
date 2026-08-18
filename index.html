@@ -4,101 +4,160 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>श्रीमालूक रेस्टोरेंट</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
-    :root { --primary: #e53935; --dark: #1c1c1c; --bg: #f8f9fa; }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: var(--bg); color: var(--dark); padding-bottom: 90px; }
+    :root { --primary: #e53935; --primary-dark: #c62828; --green: #2e7d32; --bg: #f8f9fa; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--bg); color: #212121; padding-bottom: 110px; }
 
-    /* Header Styling */
-    header { background: #ffffff; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100; }
-    .logo { font-size: 20px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px; }
-    .btn-logout { background: #ffebee; color: var(--primary); border: none; padding: 6px 14px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 13px; }
+    /* HEADER & NAVBAR */
+    header { background: #fff; padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 12px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 1000; }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand-icon { background: var(--primary); color: #fff; width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .brand-name { font-size: 20px; font-weight: 800; color: #111; letter-spacing: -0.5px; }
+    .brand-tag { font-size: 10px; color: var(--green); font-weight: 700; display: block; }
+    .btn-logout { background: #ffebee; color: var(--primary); border: none; padding: 6px 14px; border-radius: 20px; font-weight: 700; cursor: pointer; font-size: 12px; }
 
-    /* Auth Box */
-    .auth-container { max-width: 380px; margin: 50px auto; background: #fff; padding: 30px 20px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; }
-    .auth-container h2 { font-size: 22px; color: var(--dark); margin-bottom: 8px; }
-    .auth-container p { font-size: 13px; color: #777; margin-bottom: 20px; }
-    .input-box { width: 100%; padding: 14px; margin-bottom: 12px; border: 1px solid #e0e0e0; border-radius: 10px; outline: none; font-size: 14px; background: #fafafa; }
+    /* AUTH / LOGIN FORM */
+    .auth-wrapper { max-width: 400px; margin: 40px auto; padding: 0 16px; }
+    .auth-card { background: #fff; border-radius: 20px; padding: 28px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); text-align: center; }
+    .auth-card h2 { font-size: 22px; margin-bottom: 6px; font-weight: 800; }
+    .auth-card p { font-size: 13px; color: #666; margin-bottom: 20px; }
+    .input-group { position: relative; margin-bottom: 14px; }
+    .input-group i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #888; font-size: 14px; }
+    .input-box { width: 100%; padding: 12px 14px 12px 40px; border: 1.5px solid #eee; border-radius: 12px; font-size: 14px; outline: none; transition: all 0.2s; }
     .input-box:focus { border-color: var(--primary); background: #fff; }
-    .btn-main { width: 100%; padding: 14px; background: var(--primary); color: #fff; border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; box-shadow: 0 4px 12px rgba(229,57,53,0.3); }
+    .btn-submit { width: 100%; padding: 14px; background: linear-gradient(135deg, #e53935, #c62828); color: #fff; border: none; border-radius: 12px; font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0 6px 18px rgba(229,57,53,0.3); }
 
-    /* Layout Container */
-    .container { max-width: 480px; margin: 20px auto; padding: 0 16px; display: none; }
-    .section-title { font-size: 18px; font-weight: 700; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+    /* MAIN APP CONTAINER */
+    .app-container { max-width: 480px; margin: 0 auto; padding: 12px 16px; display: none; }
 
-    /* Admin Panel Styling */
-    .admin-card { background: #fff; padding: 20px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 2px dashed #ffb74d; margin-bottom: 25px; display: none; }
-    .admin-card h3 { color: #f57c00; font-size: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+    /* BANNER */
+    .promo-banner { background: linear-gradient(135deg, #2e7d32, #1b5e20); color: #fff; padding: 14px 18px; border-radius: 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 6px 15px rgba(46,125,50,0.25); }
+    .promo-banner h3 { font-size: 16px; font-weight: 800; }
+    .promo-banner p { font-size: 11px; opacity: 0.9; margin-top: 2px; }
 
-    /* Food Menu Card Styling */
-    .food-card { background: #fff; border-radius: 16px; padding: 16px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.03); border: 1px solid #f0f0f0; }
-    .food-details h4 { font-size: 16px; font-weight: 700; color: #2c3e50; }
-    .food-details .price { font-size: 15px; font-weight: 700; color: var(--primary); margin-top: 4px; }
-    .food-details .tag { font-size: 11px; background: #e8f5e9; color: #2e7d32; padding: 2px 8px; border-radius: 4px; font-weight: 600; display: inline-block; margin-top: 6px; }
+    /* SEARCH & CATEGORY FILTERS */
+    .search-box-wrapper { position: relative; margin-bottom: 14px; }
+    .search-box-wrapper i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #777; }
+    .search-input { width: 100%; padding: 12px 14px 12px 40px; background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; font-size: 13px; outline: none; }
     
-    .btn-add { background: #fff; color: #2e7d32; border: 1px solid #2e7d32; padding: 8px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
-    .btn-add:active { transform: scale(0.95); }
+    .categories { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 10px; scrollbar-width: none; }
+    .cat-btn { background: #fff; border: 1px solid #e0e0e0; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; color: #555; white-space: nowrap; cursor: pointer; }
+    .cat-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-    /* Cart Bar */
-    .cart-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 14px 20px; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); display: none; justify-content: space-between; align-items: center; z-index: 1000; }
-    .cart-btn { background: #25D366; color: white; border: none; padding: 12px 24px; border-radius: 30px; font-size: 15px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    /* ADMIN PANEL */
+    .admin-panel { background: #fff; border-radius: 16px; padding: 16px; border: 2px dashed #f57c00; margin-bottom: 20px; display: none; }
+    .admin-title { color: #f57c00; font-size: 15px; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
 
-    /* Live Orders List */
-    .order-box { background: #e8f5e9; border-left: 4px solid #2e7d32; padding: 10px; margin-top: 8px; border-radius: 6px; font-size: 13px; }
+    /* FOOD CARD (ZOMATO STYLE) */
+    .food-card { background: #fff; border-radius: 18px; padding: 14px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 16px rgba(0,0,0,0.03); border: 1px solid #f0f0f0; }
+    .food-info { flex: 1; padding-right: 12px; }
+    .food-title { font-size: 16px; font-weight: 800; color: #111; display: flex; align-items: center; gap: 6px; }
+    .veg-symbol { font-size: 10px; color: var(--green); border: 1px solid var(--green); padding: 1px 3px; border-radius: 3px; }
+    .food-price { font-size: 15px; font-weight: 800; color: var(--primary); margin: 4px 0; }
+    .food-desc { font-size: 12px; color: #777; line-height: 1.3; }
+
+    .food-action { position: relative; display: flex; flex-direction: column; align-items: center; }
+    .food-img { width: 95px; height: 95px; border-radius: 14px; object-fit: cover; }
+    
+    .add-btn { position: absolute; bottom: -8px; background: #fff; color: var(--green); border: 1px solid var(--green); padding: 6px 18px; border-radius: 8px; font-weight: 800; font-size: 13px; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
+    .qty-control { position: absolute; bottom: -8px; background: var(--green); color: #fff; display: flex; align-items: center; gap: 10px; padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 13px; box-shadow: 0 3px 10px rgba(0,0,0,0.15); }
+    .qty-btn { background: none; border: none; color: #fff; font-size: 16px; cursor: pointer; font-weight: bold; }
+
+    /* FLOATING CART BAR */
+    .cart-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 12px 20px; box-shadow: 0 -5px 25px rgba(0,0,0,0.08); display: none; justify-content: space-between; align-items: center; z-index: 1000; border-top-left-radius: 16px; border-top-right-radius: 16px; }
+    .cart-btn { background: #25D366; color: white; border: none; padding: 12px 22px; border-radius: 30px; font-size: 15px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(37,211,102,0.3); }
+
+    .order-badge { background: #e8f5e9; border-left: 4px solid var(--green); padding: 8px; margin-top: 6px; border-radius: 4px; font-size: 12px; }
   </style>
 </head>
 <body>
 
-  <!-- HEADER -->
+  <!-- HEADER NAVBAR -->
   <header>
-    <div class="logo"><i class="fa-solid fa-utensils"></i> श्रीमालूक</div>
-    <button class="btn-logout" id="logoutBtn" style="display:none;" onclick="logout()">लॉगआउट</button>
+    <div class="brand">
+      <div class="brand-icon"><i class="fa-solid fa-utensils"></i></div>
+      <div>
+        <span class="brand-name">श्रीमालूक</span>
+        <span class="brand-tag">🔴 Live Restaurant</span>
+      </div>
+    </div>
+    <button class="btn-logout" id="logoutBtn" style="display:none;" onclick="location.reload()">लॉगआउट</button>
   </header>
 
-  <!-- AUTH / LOGIN CONTAINER -->
-  <div class="auth-container" id="authBox">
-    <h2>स्वागत है! 👋</h2>
-    <p>ऑर्डर करने के लिए लॉगिन करें</p>
-    <input type="email" class="input-box" id="email" placeholder="ईमेल आईडी">
-    <input type="password" class="input-box" id="password" placeholder="पासवर्ड">
-    <button class="btn-main" onclick="handleLogin()">आगे बढ़ें</button>
+  <!-- LOGIN BOX -->
+  <div class="auth-wrapper" id="authBox">
+    <div class="auth-card">
+      <h2>स्वागत है! 😋</h2>
+      <p>ऑनलाइन मंगाने के लिए लॉगिन करें</p>
+      <div class="input-group">
+        <i class="fa-solid fa-envelope"></i>
+        <input type="email" class="input-box" id="email" placeholder="ईमेल आईडी">
+      </div>
+      <div class="input-group">
+        <i class="fa-solid fa-lock"></i>
+        <input type="password" class="input-box" id="password" placeholder="पासवर्ड">
+      </div>
+      <button class="btn-submit" onclick="handleLogin()">साइन इन करें</button>
+    </div>
   </div>
 
-  <!-- MAIN APP CONTENT -->
-  <div class="container" id="mainContainer">
+  <!-- MAIN APP AREA -->
+  <div class="app-container" id="mainApp">
     
-    <!-- ADMIN SECTION -->
-    <div class="admin-card" id="adminPanel">
-      <h3><i class="fa-solid fa-shield-halved"></i> एडमिन कंट्रोल पैनल</h3>
-      <input type="text" class="input-box" id="itemName" placeholder="नया व्यंजन (उदा: शाही पनीर)">
-      <input type="number" class="input-box" id="itemPrice" placeholder="कीमत (₹)">
-      <button class="btn-main" style="background:#f57c00;" onclick="addItem()">मेनू में जोड़ें</button>
-      <div style="margin-top: 15px; font-weight: bold;">लाइव ऑर्डर्स:</div>
+    <!-- PROMO BANNER -->
+    <div class="promo-banner">
+      <div>
+        <h3>20% की विशेष छूट! 🎉</h3>
+        <p>स्वादिष्ट शुद्ध शाकाहारी भोजन आपके द्वार पर</p>
+      </div>
+      <i class="fa-solid fa-bowl-food" style="font-size: 32px; opacity:0.8;"></i>
+    </div>
+
+    <!-- ADMIN PANEL -->
+    <div class="admin-panel" id="adminPanel">
+      <div class="admin-title"><i class="fa-solid fa-user-shield"></i> एडमिन कंट्रोल (नया आइटम जोड़ें)</div>
+      <input type="text" class="input-box" id="itemName" placeholder="व्यंजन का नाम (उदा: कड़ाई पनीर)" style="margin-bottom:8px;">
+      <input type="number" class="input-box" id="itemPrice" placeholder="कीमत (₹)" style="margin-bottom:8px;">
+      <select class="input-box" id="itemCat" style="margin-bottom:8px;">
+        <option value="paneer">पनीर स्पेशल</option>
+        <option value="roti">रोटी / ब्रेड</option>
+        <option value="drinks">ड्रिंक्स & स्वीट्स</option>
+      </select>
+      <button class="btn-submit" style="background:#f57c00; box-shadow:none;" onclick="addMenuItem()">+ मेनू में सेव करें</button>
+      <div style="margin-top:15px; font-weight:800; font-size:13px;">लाइव ऑर्डर्स:</div>
       <div id="liveOrders"></div>
     </div>
 
-    <!-- FOOD MENU SECTION -->
-    <div class="section-title">
-      <span>खास आपके लिए</span>
-      <span style="font-size: 12px; color: #777; font-weight: normal;">Pure Veg 🟢</span>
+    <!-- SEARCH BAR -->
+    <div class="search-box-wrapper">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" class="search-input" id="searchInput" placeholder="पसंदीदा व्यंजन खोजें..." onkeyup="filterMenu()">
     </div>
-    
+
+    <!-- CATEGORIES -->
+    <div class="categories">
+      <button class="cat-btn active" onclick="filterCat('all', this)">सब (All)</button>
+      <button class="cat-btn" onclick="filterCat('paneer', this)">पनीर स्पेशल</button>
+      <button class="cat-btn" onclick="filterCat('roti', this)">रोटी / ब्रेड</button>
+      <button class="cat-btn" onclick="filterCat('drinks', this)">ड्रिंक्स & स्वीट्स</button>
+    </div>
+
+    <!-- FOOD MENU LIST -->
     <div id="menuList"></div>
   </div>
 
   <!-- FLOATING CART BAR -->
   <div class="cart-bar" id="cartBar">
     <div>
-      <div style="font-size: 11px; color: #777;">कुल जोड़</div>
-      <div style="font-size: 18px; font-weight: 800; color: var(--dark);">₹<span id="totalPrice">0</span></div>
+      <div style="font-size: 11px; color: #777; font-weight:600;">कुल राशि (<span id="cartCount">0</span> आइटम्स)</div>
+      <div style="font-size: 19px; font-weight: 800; color: #111;">₹<span id="totalPrice">0</span></div>
     </div>
     <button class="cart-btn" onclick="sendOrder()">
       <i class="fa-brands fa-whatsapp"></i> WhatsApp ऑर्डर
     </button>
   </div>
-
-  <audio id="orderSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
 
   <!-- FIREBASE SDKs -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -119,7 +178,16 @@
 
     const ADMIN_EMAIL = "surajchardana@gmail.com";
     const ADMIN_PASS = "shreemalook2026";
-    let currentUser = "", userLocation = "लोकेशन उपलब्ध नहीं";
+    let currentUser = "", userLocation = "लोकेशन प्राप्त नहीं हुई";
+    let allMenuItems = [], cart = {};
+
+    // Premium Default Items
+    const defaultMenu = [
+      { id: "d1", name: "शाही पनीर", price: 220, category: "paneer", desc: "ताज़ा पनीर और रिच क्रीमी ग्रेवी", img: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=300" },
+      { id: "d2", name: "दाल मखनी", price: 180, category: "paneer", desc: "मक्खन और मलाई से भरपूर खास दाल", img: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=300" },
+      { id: "d3", name: "तंदूरी बटर रोटी", price: 25, category: "roti", desc: "गरमा गरम तंदूरी मक्खन रोटी", img: "https://images.unsplash.com/photo-1626074353765-517a681e40be?w=300" },
+      { id: "d4", name: "ठंडी लस्सी", price: 60, category: "drinks", desc: "मलाईदार मीठी पंजाबी लस्सी", img: "https://images.unsplash.com/photo-1571006682885-23c3453a29bc?w=300" }
+    ];
 
     window.onload = function() {
       if (navigator.geolocation) {
@@ -133,71 +201,152 @@
     function handleLogin() {
       const e = document.getElementById('email').value.trim();
       const p = document.getElementById('password').value.trim();
-      if (!e || !p) return alert("कृपया जानकारी पूरी भरें!");
+      if (!e || !p) return alert("कृपया ईमेल और पासवर्ड दोनों भरें!");
 
       currentUser = e;
       document.getElementById('authBox').style.display = 'none';
       document.getElementById('logoutBtn').style.display = 'block';
-      document.getElementById('mainContainer').style.display = 'block';
+      document.getElementById('mainApp').style.display = 'block';
 
       if (e === ADMIN_EMAIL && p === ADMIN_PASS) {
         document.getElementById('adminPanel').style.display = 'block';
       } else {
         document.getElementById('cartBar').style.display = 'flex';
       }
+      loadMenuData();
     }
 
-    function logout() {
-      location.reload();
+    function loadMenuData() {
+      db.ref('menu/').on('value', snapshot => {
+        allMenuItems = [];
+        if (snapshot.exists()) {
+          snapshot.forEach(child => {
+            allMenuItems.push({ id: child.key, ...child.val() });
+          });
+        } else {
+          allMenuItems = defaultMenu;
+        }
+        renderMenu(allMenuItems);
+      }, err => { renderMenu(defaultMenu); });
     }
 
-    function addItem() {
+    function renderMenu(items) {
+      const list = document.getElementById('menuList');
+      list.innerHTML = '';
+      
+      if(items.length === 0) {
+        list.innerHTML = `<div style="text-align:center; padding:30px; color:#777;">कोई व्यंजन नहीं मिला!</div>`;
+        return;
+      }
+
+      items.forEach(item => {
+        const qty = cart[item.id] ? cart[item.id].qty : 0;
+        const imgUrl = item.img || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300";
+
+        let actionHtml = `<button class="add-btn" onclick="updateQty('${item.id}', 1, '${item.name}', ${item.price})">ADD</button>`;
+        if(qty > 0) {
+          actionHtml = `
+            <div class="qty-control">
+              <button class="qty-btn" onclick="updateQty('${item.id}', -1, '${item.name}', ${item.price})">-</button>
+              <span>${qty}</span>
+              <button class="qty-btn" onclick="updateQty('${item.id}', 1, '${item.name}', ${item.price})">+</button>
+            </div>`;
+        }
+
+        list.innerHTML += `
+          <div class="food-card">
+            <div class="food-info">
+              <div class="food-title"><span class="veg-symbol">🟢</span> ${item.name}</div>
+              <div class="food-price">₹${item.price}</div>
+              <div class="food-desc">${item.desc || "ताजा और स्वादिष्ट"}</div>
+            </div>
+            <div class="food-action">
+              <img src="${imgUrl}" class="food-img">
+              ${actionHtml}
+            </div>
+          </div>`;
+      });
+    }
+
+    function updateQty(id, change, name, price) {
+      if(!cart[id]) cart[id] = { name, price, qty: 0 };
+      cart[id].qty += change;
+
+      if(cart[id].qty <= 0) delete cart[id];
+      
+      updateCartTotals();
+      renderMenu(allMenuItems);
+    }
+
+    function updateCartTotals() {
+      let total = 0, count = 0;
+      for (let id in cart) {
+        total += cart[id].price * cart[id].qty;
+        count += cart[id].qty;
+      }
+      document.getElementById('totalPrice').innerText = total;
+      document.getElementById('cartCount').innerText = count;
+    }
+
+    function filterCat(category, btn) {
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      if(category === 'all') {
+        renderMenu(allMenuItems);
+      } else {
+        const filtered = allMenuItems.filter(i => i.category === category);
+        renderMenu(filtered);
+      }
+    }
+
+    function filterMenu() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = allMenuItems.filter(i => i.name.toLowerCase().includes(q));
+      renderMenu(filtered);
+    }
+
+    function addMenuItem() {
       const name = document.getElementById('itemName').value;
       const price = document.getElementById('itemPrice').value;
-      if (!name || !price) return alert("नाम और दाम दोनों लिखें!");
+      const category = document.getElementById('itemCat').value;
+      if (!name || !price) return alert("नाम और कीमत दोनों भरें!");
 
-      db.ref('menu/').push({ name, price: Number(price) });
+      db.ref('menu/').push({ 
+        name, price: Number(price), category,
+        desc: "स्वादिष्ट व्यंजन", img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300"
+      });
+
+      alert("व्यंजन मेनू में जोड़ दिया गया!");
       document.getElementById('itemName').value = '';
       document.getElementById('itemPrice').value = '';
     }
 
-    db.ref('menu/').on('value', snapshot => {
-      const list = document.getElementById('menuList');
-      list.innerHTML = '';
-      if(!snapshot.exists()) {
-        list.innerHTML = `<div class="food-card"><div class="food-details"><h4>शाही पनीर</h4><div class="price">₹220</div><span class="tag">बेस्ट सेलर</span></div><button class="btn-add" onclick="addToCart('शाही पनीर', 220)">+ ADD</button></div>`;
-      } else {
-        snapshot.forEach(child => {
-          const item = child.val();
-          list.innerHTML += `<div class="food-card"><div class="food-details"><h4>${item.name}</h4><div class="price">₹${item.price}</div><span class="tag">स्वादिष्ट</span></div><button class="btn-add" onclick="addToCart('${item.name}', ${item.price})">+ ADD</button></div>`;
-        });
-      }
-    });
-
-    let cart = [], total = 0;
-    function addToCart(name, price) {
-      cart.push({ name, price });
-      total += price;
-      document.getElementById('totalPrice').innerText = total;
-    }
-
     function sendOrder() {
-      if (cart.length === 0) return alert("कार्ट में कुछ जोड़ें!");
-      document.getElementById('orderSound').play().catch(()=>{});
+      let keys = Object.keys(cart);
+      if (keys.length === 0) return alert("कार्ट में कुछ जोड़ें!");
+
+      let total = 0;
+      let msg = `*श्रीमालूक रेस्टोरेंट - नया ऑर्डर*%0A`;
+      msg += `ग्राहक: ${currentUser}%0A%0A*आइटम लिस्ट:*%0A`;
+      
+      keys.forEach((id, i) => {
+        let item = cart[id];
+        let itemTotal = item.price * item.qty;
+        total += itemTotal;
+        msg += `${i + 1}. ${item.name} x ${item.qty} = ₹${itemTotal}%0A`;
+      });
+
+      msg += `%0A*कुल योग:* ₹${total}%0A*लोकेशन:* ${userLocation}`;
 
       db.ref('orders/').push({ user: currentUser, total, location: userLocation, time: Date.now() });
-
-      let msg = `*श्रीमालूक रेस्टोरेंट - नया ऑर्डर*%0Aग्राहक: ${currentUser}%0A%0A*आइटम्स:*%0A`;
-      cart.forEach((item, i) => { msg += `${i + 1}. ${item.name} - ₹${item.price}%0A`; });
-      msg += `%0A*कुल:* ₹${total}%0A*लोकेशन:* ${userLocation}`;
-
       window.open(`https://wa.me/917339761118?text=${msg}`, '_blank');
     }
 
     db.ref('orders/').on('child_added', snapshot => {
       const data = snapshot.val();
       const div = document.createElement('div');
-      div.className = 'order-box';
+      div.className = 'order-badge';
       div.innerHTML = `<strong>नया ऑर्डर:</strong> ₹${data.total} (${data.user})`;
       document.getElementById('liveOrders').prepend(div);
     });
