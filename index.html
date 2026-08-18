@@ -1,109 +1,257 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="hi">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>श्री मलूक रेस्टोरेंट</title>
-<style>
-*{box-sizing:border-box}body{margin:0;background:#f5f0eb;color:#222;font-family:Arial,sans-serif;padding-bottom:95px}.header{background:#fff;padding:13px 16px;position:sticky;top:0;z-index:5;box-shadow:0 2px 8px #0001}.brand{font-size:22px;font-weight:900;color:#c0392b}.sub{font-size:12px;color:#777}.hero{background:linear-gradient(135deg,#fff5ef,#ffe9df);padding:17px 16px}.hero h1{font-size:21px;margin:0 0 5px}.hero p{font-size:13px;color:#666;margin:0}.pill{display:inline-block;background:#c0392b;color:#fff;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold;margin-top:10px}.chips{background:#fff;padding:9px 12px;display:flex;gap:7px;flex-wrap:wrap}.chip{background:#f5f0eb;border-radius:20px;padding:6px 11px;font-size:12px;font-weight:bold}.chip.green{background:#e8f5e9;color:#168a45}.chip.gold{background:#fff8df;color:#b9770e}h2{font-size:19px;margin:15px 16px}.item{background:#fff;margin:8px 12px;padding:11px;border-radius:14px;display:flex;gap:12px;box-shadow:0 3px 14px #0000000b}.pic{width:72px;height:72px;border-radius:12px;background:#fff0dc;display:flex;align-items:center;justify-content:center;font-size:38px;flex:none}.info{flex:1}.name{font-size:16px;font-weight:900}.desc{font-size:12px;color:#777;margin:3px 0}.price{font-size:17px;font-weight:900;color:#c0392b;margin:6px 0}.add,.place,.pay,.green,.locbtn,.dark,.danger,.close{border:0;border-radius:9px;padding:10px 14px;font-weight:800;cursor:pointer}.add{background:#fff;color:#c0392b;border:1px solid #c0392b}.qty{display:flex;align-items:center;gap:9px}.qty button{width:31px;height:31px;border:0;border-radius:8px;background:#c0392b;color:#fff;font-size:18px}.out{font-size:12px;font-weight:800;color:#e74c3c}.form{background:#fff;margin:12px;padding:15px;border-radius:14px}.form input,.form textarea,.box input{width:100%;padding:12px;border:1px solid #ddd;border-radius:9px;margin:5px 0 9px;font-size:15px}.locbtn{width:100%;background:#222;color:#fff}.place{width:100%;background:#c0392b;color:#fff;margin-top:8px}.pay{width:100%;background:#168a45;color:#fff;margin-top:8px}.cart{position:fixed;bottom:10px;left:10px;right:10px;max-width:700px;margin:auto;background:#1e1e2a;color:#fff;padding:11px 14px;border-radius:13px;display:flex;justify-content:space-between;align-items:center;z-index:10;box-shadow:0 6px 25px #0005}.checkout{background:#fff;color:#1e1e2a;border:0;border-radius:8px;padding:9px 15px;font-weight:900}.topbtn{position:fixed;right:8px;top:63px;background:#111;color:#fff;border:0;border-radius:8px;padding:7px 9px;font-size:11px;z-index:10}.modal{display:none;position:fixed;inset:0;background:#0009;z-index:30;padding:16px;overflow:auto}.box{background:#fff;border-radius:16px;padding:18px;max-width:620px;margin:30px auto}.small{font-size:12px;color:#777}.error{color:#e74c3c;font-size:13px;margin:5px 0}.row{display:flex;gap:7px}.row>*{flex:1}.order{border:1px solid #eee;border-radius:10px;padding:10px;margin:8px 0;background:#fafafa}.status{display:inline-block;padding:3px 9px;border-radius:15px;background:#fff3cd;font-size:11px;font-weight:bold}.green{background:#168a45;color:#fff}.dark{background:#111;color:#fff}.danger{background:#b42318;color:#fff}.close{background:#eee}.notice{padding:10px;background:#fff8df;border-left:4px solid #f39c12;border-radius:8px;font-size:12px;margin:8px 0}.hidden{display:none!important}
-</style>
-</head><body>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shreemalook Restaurant</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #f8f9fa; padding-bottom: 90px; }
+    header { background: #d32f2f; color: white; padding: 15px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+    
+    .auth-box { background: white; padding: 20px; margin: 20px auto; max-width: 400px; border-radius: 8px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .auth-box input { padding: 10px; margin: 8px 0; width: 100%; border: 1px solid #ccc; border-radius: 4px; }
+    .auth-box button { padding: 10px 15px; background: #2e7d32; color: white; border: none; border-radius: 4px; cursor: pointer; margin: 5px; font-weight: bold; width: 45%; }
+    
+    .user-info-bar { background: #e8f5e9; padding: 10px; text-align: center; display: none; margin-bottom: 15px; border-bottom: 1px solid #c8e6c9; }
+    .btn-logout { background: #d32f2f; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; margin-left: 10px; }
 
-<header class="header">
-<div class="brand">श्री मलूक रेस्टोरेंट</div>
-<div class="sub">Kunhadi, Kota • Breakfast & Fast Food</div>
-</header>
+    .admin-panel { background: #fff3cd; border: 2px solid #ffeeba; padding: 15px; margin: 15px auto; max-width: 500px; border-radius: 8px; display: none; }
+    .admin-panel input { padding: 8px; margin: 5px 0; width: 100%; border: 1px solid #ccc; border-radius: 4px; }
+    .admin-panel button { padding: 8px; background: #2e7d32; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 5px; }
 
-<section class="hero">
-<h1>🔥 गरमा-गरम नाश्ता आपके दरवाज़े तक</h1>
-<p>Fresh food • Online UPI • Fast delivery</p>
-<span class="pill">🚴 Kunhadi • FREE DELIVERY</span>
-</section>
+    .menu-container { max-width: 500px; margin: 0 auto; padding: 10px; display: none; }
+    .item-card { background: white; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.08); }
+    .btn-add { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+    
+    .cart-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #ffffff; padding: 15px 20px; border-top: 2px solid #eee; display: none; justify-content: space-between; align-items: center; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
+    .btn-order { background: #25D366; color: white; border: none; padding: 12px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 15px; }
+    .order-alert { background: #d4edda; border-left: 5px solid #28a745; padding: 8px; margin-top: 5px; font-size: 13px; }
+  </style>
+</head>
+<body>
 
-<div class="chips">
-<span class="chip gold">⭐ <span id="rating">4.8</span> Rating</span>
-<span class="chip green">💳 Online Payment</span>
-<span class="chip">📍 <span id="shopLocation">Kunhadi, Kota</span></span>
-<span class="chip" id="loginState" onclick="openLogin()" style="cursor:pointer">👤 Google Login</span>
-</div>
+  <header>
+    <h1>श्रीमालूक रेस्टोरेंट</h1>
+  </header>
 
-<h2>🍽️ Popular Items</h2>
-<div id="menu"></div>
+  <!-- LOGGED IN USER BAR -->
+  <div class="user-info-bar" id="userInfoBar">
+    <span id="loggedInEmail"></span>
+    <button class="btn-logout" onclick="logout()">लॉगआउट</button>
+  </div>
 
-<div class="form">
-<h2 style="margin:0 0 8px">🛵 Delivery Details</h2>
-<input id="customerName" placeholder="आपका नाम">
-<input id="customerPhone" placeholder="मोबाइल नंबर" inputmode="numeric" maxlength="10">
-<textarea id="customerAddress" rows="3" placeholder="पूरा पता / PG / Hostel"></textarea>
-<button class="locbtn" onclick="getLocation()">📍 मेरी Current Location लें</button>
-<div id="locStatus" class="small" style="margin:7px 0">Location अभी नहीं ली गई</div>
-<div class="notice">💳 पहले <b>Payment</b> करें। Payment के बाद वापस आकर <b>Place Order</b> दबाएँ।</div>
-<button class="place" onclick="openPayment()">💳 Payment Options</button>
-<button id="placeOrderBtn" class="green hidden" style="width:100%;margin-top:8px" onclick="placeOrder()">✅ Place Order</button>
-<div id="paymentState" class="small" style="margin-top:7px;text-align:center">Payment के बाद Place Order करें</div>
-</div>
+  <!-- LOGIN / SIGNUP SECTION -->
+  <div class="auth-box" id="authSection">
+    <h3>लॉगिन / साइन अप</h3>
+    <input type="email" id="email" placeholder="ईमेल"><br>
+    <input type="password" id="password" placeholder="पासवर्ड"><br>
+    <button onclick="login()">लॉगिन</button>
+    <button onclick="signup()">साइन अप</button>
+  </div>
 
-<div class="form">
-<h2 style="margin:0 0 8px">❓ Help</h2>
-<div class="small">Order या मदद के लिए WhatsApp पर संपर्क करें।</div>
-<a href="https://wa.me/917339761118" target="_blank" style="display:block;text-align:center;text-decoration:none;background:#25d366;color:#fff;border-radius:9px;padding:12px;font-weight:800;margin-top:9px">💬 WhatsApp Help</a>
-</div>
+  <!-- ADMIN PANEL SECTION (Opens if email is surajchardana@gmail.com) -->
+  <div class="admin-panel" id="adminPanel">
+    <h3>एडमिन पैनल - नया आइटम जोड़ें</h3>
+    <input type="text" id="itemName" placeholder="व्यंजन का नाम (उदा: शाही पनीर)">
+    <input type="number" id="itemPrice" placeholder="कीमत (₹)">
+    <button onclick="addItemToMenu()">मेनू में जोड़ें</button>
+    
+    <h4 style="margin-top: 15px;">लाइव ऑर्डर्स:</h4>
+    <div id="liveOrders"></div>
+  </div>
 
-<div class="cart">
-<div><b>₹<span id="total">0</span></b><br><small><span id="count">0</span> items</small></div>
-<button class="checkout" onclick="openPayment()">Checkout</button>
-</div>
+  <!-- CUSTOMER MENU SECTION -->
+  <div class="menu-container" id="menuContainer">
+    <h3 style="text-align: center; margin-bottom: 10px;">हमारा मेनू</h3>
+    <div id="menuItems"></div>
+  </div>
 
-<button class="topbtn" onclick="adminLogin()">⚙ Admin</button>
+  <!-- CART BAR -->
+  <div class="cart-bar" id="cartBar">
+    <div><strong>कुल: ₹<span id="total-price">0</span></strong> (<span id="cart-count">0</span> आइटम)</div>
+    <button class="btn-order" onclick="placeOrder()">WhatsApp पर ऑर्डर करें</button>
+  </div>
 
-<div class="modal" id="loginModal">
-<div class="box">
-<h2 style="margin:0 0 6px">👤 Customer Login</h2>
-<p class="small">Google account से सुरक्षित Login करें। OTP की जरूरत नहीं।</p>
-<div id="loginError" class="error"></div>
-<button class="pay" onclick="loginCustomer()">🔵 Continue with Google</button>
-<button class="dark" style="margin-top:8px;width:100%" onclick="logoutCustomer()">🚪 Logout Google</button>
-<button class="close" style="margin-top:8px;width:100%" onclick="closeModal('loginModal')">Cancel</button>
-</div>
-</div>
+  <!-- AUDIO NOTIFICATION -->
+  <audio id="order-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
 
-<div class="modal" id="paymentModal">
-<div class="box">
-<h2 style="margin:0 0 6px">💳 Payment</h2>
-<p class="small">UPI app में payment करें। उसके बाद वापस इस page पर आकर <b>Place Order</b> दबाएँ।</p>
-<div style="background:#f5f0eb;padding:12px;border-radius:10px;text-align:center;font-weight:900;color:#c0392b" id="upiText">shreejankilal@axl</div>
-<div class="order" id="paymentSummary"></div>
-<button class="pay" onclick="launchUPI()">📲 UPI ऐप में Payment करें</button>
-<button class="green" style="width:100%;margin-top:8px" onclick="closeModal('paymentModal');showPlaceOrder()">↩️ Payment के बाद Place Order</button>
-<button class="close" style="width:100%;margin-top:8px" onclick="closeModal('paymentModal')">Cancel</button>
-<p class="small" style="margin-top:8px">⚠️ यह UPI deep-link payment status की स्वतंत्र verification नहीं करता।</p>
-</div>
-</div>
+  <!-- FIREBASE SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
-<div class="modal" id="adminLoginModal">
-<div class="box">
-<h2 style="margin:0 0 8px">🔐 Owner Login</h2>
-<p class="small">Owner Google account से Login करें।</p>
-<div id="adminError" class="error"></div>
-<button class="dark" style="width:100%" onclick="checkAdmin()">🔵 Continue with Google</button>
-<button class="close" style="width:100%;margin-top:8px" onclick="closeModal('adminLoginModal')">Cancel</button>
-</div>
-</div>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAJ6RfuOQWw3XV_5E_JLcOCuMzldCMSM-E",
+      authDomain: "shreemalook-restaurant.firebaseapp.com",
+      projectId: "shreemalook-restaurant",
+      databaseURL: "https://shreemalook-restaurant-default-rtdb.firebaseio.com",
+      storageBucket: "shreemalook-restaurant.appspot.com",
+      messagingSenderId: "666247853776",
+      appId: "1:666247853776:web:ab837e82da6327347e90d5",
+      measurementId: "G-94NZ9BYHC1"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
 
-<div class="modal" id="adminModal">
-<div class="box">
-<h2 style="margin:0">⚙️ Owner Panel</h2>
-<p class="small">Firebase connected होने पर orders सभी devices से यहाँ आएँगे।</p>
-<div class="notice">🔐 Owner access Google account से सुरक्षित है। Code में Admin password नहीं रखा गया है।</div>
-<div class="notice">🔐 Google Login के लिए Firebase Authentication में Google Enabled और इस्तेमाल होने वाला domain Authorized Domains में होना चाहिए।</div>
+    const ADMIN_EMAIL = "surajchardana@gmail.com";
+    let userLocationLink = "लोकेशन अनुमति नहीं मिली";
 
-<div class="row">
-<input id="setLocation" placeholder="Restaurant location">
-<input id="setRating" type="number" min="1" max="5" step=".1">
-</div>
+    // Request location on load
+    window.onload = function() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            userLocationLink = `https://maps.google.com/?q=${lat},${lon}`;
+          },
+          (error) => {
+            userLocationLink = "लोकेशन एक्सेस की अनुमति नहीं दी गई";
+          }
+        );
+      }
+    };
 
-<button class="green" onclick="saveSettings()">Save Settings</button>
-<hr>
-<h3>🍽️ Menu / Stock</h3>
+    // AUTHENTICATION LOGIC
+    function signup() {
+      const e = document.getElementById('email').value;
+      const p = document.getElementById('password').value;
+      if(!e || !p) return alert("ईमेल और पासवर्ड भरें!");
+      auth.createUserWithEmailAndPassword(e, p)
+        .then(() => alert("साइन अप सफल! अब लॉगिन करें।"))
+        .catch(err => alert(err.message));
+    }
+
+    function login() {
+      const e = document.getElementById('email').value;
+      const p = document.getElementById('password').value;
+      if(!e || !p) return alert("ईमेल और पासवर्ड भरें!");
+      auth.signInWithEmailAndPassword(e, p)
+        .catch(err => alert(err.message));
+    }
+
+    function logout() {
+      auth.signOut();
+    }
+
+    // CHECK USER STATE & SHOW UI ACCORDINGLY
+    auth.onAuthStateChanged(user => {
+      const authSection = document.getElementById('authSection');
+      const userInfoBar = document.getElementById('userInfoBar');
+      const adminPanel = document.getElementById('adminPanel');
+      const menuContainer = document.getElementById('menuContainer');
+      const cartBar = document.getElementById('cartBar');
+
+      if (user) {
+        authSection.style.display = 'none';
+        userInfoBar.style.display = 'block';
+        document.getElementById('loggedInEmail').innerText = "लॉगिन है: " + user.email;
+
+        // Check if logged in user is ADMIN
+        if (user.email === ADMIN_EMAIL) {
+          adminPanel.style.display = 'block';
+          menuContainer.style.display = 'block'; // Admin can also view menu
+          cartBar.style.display = 'none'; // Admin doesn't need cart
+        } else {
+          adminPanel.style.display = 'none';
+          menuContainer.style.display = 'block';
+          cartBar.style.display = 'flex';
+        }
+      } else {
+        // Show Login screen if not logged in
+        authSection.style.display = 'block';
+        userInfoBar.style.display = 'none';
+        adminPanel.style.display = 'none';
+        menuContainer.style.display = 'none';
+        cartBar.style.display = 'none';
+      }
+    });
+
+    // ADMIN MENU ADDITION
+    function addItemToMenu() {
+      const name = document.getElementById('itemName').value;
+      const price = document.getElementById('itemPrice').value;
+      if (!name || !price) return alert("कृपया नाम और कीमत दोनों लिखें!");
+
+      db.ref('menu/').push({ name, price: Number(price) });
+      alert("व्यंजन जोड़ दिया गया!");
+      document.getElementById('itemName').value = '';
+      document.getElementById('itemPrice').value = '';
+    }
+
+    // FETCH MENU ITEMS
+    db.ref('menu/').on('value', snapshot => {
+      const menuItems = document.getElementById('menuItems');
+      menuItems.innerHTML = '';
+      
+      if(!snapshot.exists()) {
+        menuItems.innerHTML = `
+          <div class="item-card">
+            <div><strong>शाही पनीर</strong><br>₹220</div>
+            <button class="btn-add" onclick="addToCart('शाही पनीर', 220)">+ जोड़ें</button>
+          </div>
+          <div class="item-card">
+            <div><strong>दाल मखनी</strong><br>₹180</div>
+            <button class="btn-add" onclick="addToCart('दाल मखनी', 180)">+ जोड़ें</button>
+          </div>`;
+      } else {
+        snapshot.forEach(childSnapshot => {
+          const item = childSnapshot.val();
+          menuItems.innerHTML += `
+            <div class="item-card">
+              <div><strong>${item.name}</strong><br>₹${item.price}</div>
+              <button class="btn-add" onclick="addToCart('${item.name}', ${item.price})">+ जोड़ें</button>
+            </div>`;
+        });
+      }
+    });
+
+    // CART LOGIC
+    let cart = [], total = 0;
+    function addToCart(name, price) {
+      cart.push({ name, price });
+      total += price;
+      document.getElementById('cart-count').innerText = cart.length;
+      document.getElementById('total-price').innerText = total;
+    }
+
+    // PLACE ORDER VIA WHATSAPP
+    function placeOrder() {
+      if (cart.length === 0) return alert("आपकी कार्ट खाली है!");
+
+      const currentUser = auth.currentUser ? auth.currentUser.email : "अज्ञात ग्राहक";
+      const sound = document.getElementById('order-sound');
+      sound.play().catch(() => {});
+
+      // Save Order to Firebase Database
+      db.ref('orders/').push({ user: currentUser, total, location: userLocationLink, time: Date.now() });
+
+      // Open WhatsApp with details
+      const phone = "917339761118";
+      let text = ` *श्रीमालूक रेस्टोरेंट - नया ऑर्डर*%0A`;
+      text += `ग्राहक: ${currentUser}%0A%0A`;
+      text += `*ऑर्डर डिटेल्स:*%0A`;
+      cart.forEach((item, index) => { text += `${index + 1}. ${item.name} - ₹${item.price}%0A`; });
+      text += `%0A*कुल राशि:* ₹${total}%0A`;
+      text += `%0A *ग्राहक की लोकेशन (Google Maps):*%0A${userLocationLink}`;
+
+      window.open(`https://wa.me/${phone}?text=${text}`, '_blank');
+    }
+
+    // LIVE ORDERS LISTENER FOR ADMIN
+    db.ref('orders/').on('child_added', snapshot => {
+      const data = snapshot.val();
+      const div = document.createElement('div');
+      div.className = 'order-alert';
+      div.innerHTML = `<strong>नया ऑर्डर:</strong> ₹${data.total} (${data.user})`;
+      document.getElementById('liveOrders').prepend(div);
+    });
+  </script>
+</body>
+</html>
 <div id="adminMenu"></div>
 <button class="green" onclick="addItem()">+ Add Item</button>
 <hr>
